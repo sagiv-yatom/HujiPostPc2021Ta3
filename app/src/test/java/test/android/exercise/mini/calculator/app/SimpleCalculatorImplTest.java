@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.Serializable;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SimpleCalculatorImplTest {
 
@@ -24,13 +25,147 @@ public class SimpleCalculatorImplTest {
     assertEquals("0+", calculatorUnderTest.output());
   }
 
-
   @Test
   public void when_inputIsMinus_then_outputShouldBeCorrect(){
     SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
     calculatorUnderTest.insertMinus();
-    String expected = "???"; // TODO: decide the expected output when having a single minus
+    String expected = "0-"; // TODO: decide the expected output when having a single minus
     assertEquals(expected, calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsNoEqualsYet_then_outputShouldBeCorrect_forSimpleInput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertMinus();
+    assertEquals("4-", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsNoEqualsYet_then_outputShouldBeCorrect_forComplicatedInput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.clear();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(3);
+    calculatorUnderTest.insertDigit(8);
+    calculatorUnderTest.insertDigit(6);
+    calculatorUnderTest.deleteLast();
+    calculatorUnderTest.insertDigit(8);
+    assertEquals("0-45+388", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsAnEquals_then_outputShouldBeCorrect_forSimpleInput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertEquals();
+    assertEquals("-1", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsAnEquals_then_outputShouldBeCorrect_forComplicatedInput1(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.clear();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertMinus();
+    assertEquals("0-45+", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsAnEquals_then_outputShouldBeCorrect_forComplicatedInput2(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.clear();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(3);
+    calculatorUnderTest.insertDigit(8);
+    calculatorUnderTest.insertDigit(6);
+    assertEquals("0-45+386", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsAnEquals_then_outputShouldBeCorrect_forComplicatedInput3(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.clear();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(3);
+    calculatorUnderTest.insertDigit(8);
+    calculatorUnderTest.insertDigit(6);
+    calculatorUnderTest.deleteLast();
+    calculatorUnderTest.insertDigit(8);
+    calculatorUnderTest.insertEquals();
+    assertEquals("343", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_thereIsAnEquals_then_outputShouldBeCorrect_forComplicatedInput4(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(3);
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertDigit(3);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertEquals();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(8);
+    calculatorUnderTest.insertDigit(8);
+    assertEquals("348-88", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_inputHasMinusMinusOrders_then_onlyFirstOrderSeenInOutput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertMinus();
+    assertEquals("4-", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_inputHasMinusPlusOrders_then_onlyFirstOrderSeenInOutput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertPlus();
+    assertEquals("4-", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_inputHasPlusPlusOrders_then_onlyFirstOrderSeenInOutput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertPlus();
+    assertEquals("4+", calculatorUnderTest.output());
+  }
+
+  @Test
+  public void when_inputHasPlusMinusOrders_then_onlyFirstOrderSeenInOutput(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertDigit(4);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertMinus();
+    assertEquals("4+", calculatorUnderTest.output());
   }
 
   @Test
@@ -44,20 +179,46 @@ public class SimpleCalculatorImplTest {
     }
   }
 
-
   @Test
   public void when_callingDeleteLast_then_lastOutputShouldBeDeleted(){
     // todo: implement test
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+
+    // test with no initialized input
+    calculatorUnderTest.deleteLast();
+    assertEquals("0", calculatorUnderTest.output());
+
+    // test with input.length() > 1
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.deleteLast();
+    assertEquals("5", calculatorUnderTest.output());
+
+    // test with input.length() == 1
+    calculatorUnderTest.deleteLast();
+    assertEquals("0", calculatorUnderTest.output());
   }
 
   @Test
   public void when_callingClear_then_outputShouldBeCleared(){
     // todo: implement test
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+
+    // test with no initialized input
+    calculatorUnderTest.clear();
+    assertEquals("0", calculatorUnderTest.output());
+
+    // test with initialized input
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.clear();
+    assertEquals("0", calculatorUnderTest.output());
   }
 
   @Test
   public void when_savingState_should_loadThatStateCorrectly(){
     SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+
     // give some input
     calculatorUnderTest.insertDigit(5);
     calculatorUnderTest.insertPlus();
@@ -82,6 +243,27 @@ public class SimpleCalculatorImplTest {
     SimpleCalculatorImpl secondCalculator = new SimpleCalculatorImpl();
     // TODO: implement the test based on this method's name.
     //  you can get inspiration from the test method `when_savingState_should_loadThatStateCorrectly()`
+
+    // give some input
+    firstCalculator.insertMinus();
+    firstCalculator.insertDigit(5);
+    firstCalculator.insertPlus();
+    firstCalculator.insertMinus();
+    firstCalculator.insertDigit(7);
+    firstCalculator.insertDigit(3);
+    firstCalculator.insertDigit(2);
+    firstCalculator.insertMinus();
+    firstCalculator.insertDigit(1);
+
+    secondCalculator.insertDigit(9);
+
+    // save current state
+    Serializable savedState = firstCalculator.saveState();
+    assertNotNull(savedState);
+
+    // load the saved state to secondCalculator and make sure state was loaded correctly
+    secondCalculator.loadState(savedState);
+    assertEquals("0-5+732-1", secondCalculator.output());
   }
 
   // TODO:
